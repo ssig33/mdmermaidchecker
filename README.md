@@ -4,7 +4,7 @@ A CLI tool written in Go that validates Mermaid diagram syntax within Markdown f
 
 ## Prerequisites
 
-- Go 1.19 or later
+- Go 1.24 or later
 - Node.js and npm (for running `npx`)
 - `@mermaid-js/mermaid-cli` will be automatically installed on first run
 
