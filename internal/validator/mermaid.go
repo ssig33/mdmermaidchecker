@@ -42,7 +42,14 @@ func (v *Validator) ValidateMermaid(block parser.MermaidBlock) error {
 	}
 
 	// Execute mmdc command
-	cmd := v.CommandExecutor("npx", "--yes", "@mermaid-js/mermaid-cli", "-i", tempMmdFile, "-o", tempSvgFile)
+	args := []string{"--yes", "@mermaid-js/mermaid-cli", "-i", tempMmdFile, "-o", tempSvgFile}
+	
+	// Check for puppeteer config from environment variable (for CI)
+	if puppeteerConfig := os.Getenv("PUPPETEER_CONFIG"); puppeteerConfig != "" {
+		args = append(args, "-p", puppeteerConfig)
+	}
+	
+	cmd := v.CommandExecutor("npx", args...)
 
 	var stderr bytes.Buffer
 	cmd.Stderr = &stderr
