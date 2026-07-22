@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"os/exec"
 
 	"github.com/ssig33/mdmermaidchecker/internal/parser"
 	"github.com/ssig33/mdmermaidchecker/internal/validator"
@@ -27,6 +28,12 @@ func ValidateMarkdownFile(filepath string) int {
 	if len(blocks) == 0 {
 		// No mermaid blocks found - this is considered success
 		return 0
+	}
+
+	// mermaid-cli depends on puppeteer, which needs unzip to extract Chrome
+	if _, err := exec.LookPath("unzip"); err != nil {
+		fmt.Fprintln(os.Stderr, "Error: unzip is required but not found in PATH. Please install unzip to use mermaid-cli.")
+		return 1
 	}
 
 	// Validate all blocks
